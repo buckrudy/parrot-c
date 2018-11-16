@@ -2,6 +2,7 @@
  * Author: leegoogol 
  * Email: buckrudy@gamil.com
  */
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -31,6 +32,8 @@ int head_len = sizeof(FRAME_HEAD)-1 + sizeof(YELLOW)-1;
 int tail_len = sizeof(NONE)-1;
 
 unsigned char headers[] = "HTTP/1.1 200 OK\nServer: nginx/1.12.1 (Ubuntu)\nConnection: keep-alive\n\n";
+unsigned char header_redirect[] = "HTTP/1.1 302 Moved Temporarily\nServer: nginx/1.12.1 (Ubuntu)\nLocation: https://github.com/buckrudy/parrot-c\n\n";
+
 unsigned char *colors[] = {
 	YELLOW,
 	GREEN,
@@ -85,7 +88,14 @@ void *parrot_thread(void *arg)
 	pthread_detach(pthread_self());
 
 	read(client, rbuf, sizeof(rbuf));
-	write(client, headers, sizeof(headers));
+
+	if (NULL == strcasestr(rbuf, "User-Agent: curl")) {	//Not used curl OR change the http header manually
+		write(client, header_redirect, sizeof(header_redirect)-1);
+		close(client);
+		return NULL;
+	}
+	
+	write(client, headers, sizeof(headers)-1);
 
 	do {
 		memcpy(data_frames[i].data + sizeof(FRAME_HEAD)-1, colors[color], strlen(colors[color]));
