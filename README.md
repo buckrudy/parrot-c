@@ -1,3 +1,7 @@
+# C parrot
+
+参照 [parrot.live](https://github.com/hugomd/parrot.live) 项目，简单做了一个 C 版本.
+
 ## Compile
 
 `make`
