@@ -1,6 +1,6 @@
 /*
  * Author: leegoogol 
- * Email: buckrudy@gamil.com
+ * Email: buckgugle@gamil.com
  */
 #define _GNU_SOURCE
 #include <stdio.h>
